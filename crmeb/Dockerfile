@@ -18,8 +18,11 @@ ENV MAVEN_HOME=/usr/local/apache-maven-${MAVEN_VERSION}
 ENV PATH="${MAVEN_HOME}/bin:${PATH}"
 
 WORKDIR /data
-RUN mkdir /data/cr
-COPY  ./* /data
-RUN ls
+COPY crmeb-admin /data/crmeb-admin
+COPY crmeb-common /data/crmeb-common
+COPY crmeb-front /data/crmeb-front
+COPY crmeb-service /data/crmeb-service
+COPY crmebimage /data/crmebimage
+ADD ./pom.xml /data/
 
-RUN mvn install
+RUN mvn install -Dmaven.test.skip=true
