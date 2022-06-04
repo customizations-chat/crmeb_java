@@ -37,6 +37,7 @@ COPY --from=builder /root/.m2/repository/com/zbkj/crmeb-common/0.0.1-SNAPSHOT/cr
 
 COPY ./docker/application-prod-docker.yml /data/
 COPY ./docker/start.sh /data/
+RUN chmod +x /data/start.sh
 
 
 CMD [ "./start.sh" ]
