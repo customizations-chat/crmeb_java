@@ -29,6 +29,7 @@ RUN mvn install -Dmaven.test.skip=true
 
 # runtime
 FROM adoptopenjdk/openjdk8:jre8u282-b08
+
 WORKDIR /data
 COPY --from=builder /root/.m2/repository/com/zbkj/crmeb-admin/0.0.1-SNAPSHOT/crmeb-admin-0.0.1-SNAPSHOT.jar /data/crmeb-admin.jar
 COPY --from=builder /root/.m2/repository/com/zbkj/crmeb-front/0.0.1-SNAPSHOT/crmeb-front-0.0.1-SNAPSHOT.jar /data/crmeb-front.jar
@@ -37,6 +38,7 @@ COPY --from=builder /root/.m2/repository/com/zbkj/crmeb-common/0.0.1-SNAPSHOT/cr
 
 COPY ./docker/start.sh /data/
 RUN chmod +x /data/start.sh
+RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 EXPOSE 80
 
