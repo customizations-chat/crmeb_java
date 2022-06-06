@@ -10,7 +10,7 @@ crmeb:
   imagePath: /www/wwwroot/your Crmeb-admin.jar Path/ # 服务器图片路径配置 斜杠结尾
 
 server:
-  port: 20000
+  port: ${port}
 
 spring:
   profiles:
@@ -24,13 +24,13 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/crmeb_java?characterEncoding=utf-8&useSSL=false&serverTimeZone=GMT+8
-    username: root
-    password: 123456
+    url: ${jdbc_url}
+    username: ${jdbc_user}
+    password: ${jdbc_password}
   redis:
-    host: 127.0.0.1 #地址
-    port: 6379 #端口
-    password: 123456
+    host: ${redis_host} #地址
+    port: ${redis_port} #端口
+    password: ${redis_password}
     timeout: 10000 # 连接超时时间（毫秒）
     database: 15 #默认数据库
     jedis:
