@@ -17,6 +17,7 @@ import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -31,7 +32,9 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * +----------------------------------------------------------------------
@@ -60,13 +63,17 @@ public class RestTemplateUtil {
 //    /**
 //     * 设置超时时间
 //     */
-//    public RestTemplateUtil() {
+    public RestTemplateUtil() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 //        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
 //        //30s
 //        requestFactory.setConnectTimeout(30*1000);
 //        requestFactory.setReadTimeout(30*1000);
-//        restTemplate = new RestTemplate(requestFactory);
-//    }
+        try {
+            restTemplate =new RestTemplate(RestTemplateConfiguration.generateHttpRequestFactory());
+        }catch (Exception e){
+            throw e;
+        }
+    }
 
     /**
      * 发送GET请求
@@ -79,7 +86,12 @@ public class RestTemplateUtil {
         // 请勿轻易改变此提交方式，大部分的情况下，提交方式都是表单提交
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        return restTemplate.getForEntity(url, String.class, param).getBody();
+        try {
+            return restTemplate.getForEntity(url, String.class, param).getBody();
+        }catch (Exception e ) {
+            throw e;
+        }
+
     }
 
     /**
