@@ -46,33 +46,63 @@ import java.util.List;
 public class RestTemplateConfig {
     @Bean
     public RestTemplate restTemplate(HttpComponentsClientHttpRequestFactory factory) {
-        RestTemplate restTemplate = new RestTemplate(factory);
-        restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
-        restTemplate.getMessageConverters().add(new WxMappingJackson2HttpMessageConverter());
-        return restTemplate;
+        try {
+            RestTemplate restTemplate = new RestTemplate(factory);
+            return restTemplate;
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to initiate RestTemplate for access wechat-proxy.");
+        }
     }
 
     @Bean
-    public static HttpComponentsClientHttpRequestFactory generateHttpRequestFactory()
-            throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException
-    {
+    public HttpComponentsClientHttpRequestFactory httpComponentsClientHttpRequestFactory() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
         TrustStrategy acceptingTrustStrategy = (x509Certificates, authType) -> true;
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
         LayeredConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
 
         Registry<ConnectionSocketFactory> sfr = RegistryBuilder.<ConnectionSocketFactory>create().register("http", PlainConnectionSocketFactory.getSocketFactory()).register("https", csf != null ? csf : SSLConnectionSocketFactory.getSocketFactory()).build();
         PoolingHttpClientConnectionManager pollingConnectionManager = new PoolingHttpClientConnectionManager(sfr);
-
+//        pollingConnectionManager.setMaxTotal(maxTotal);
+//        pollingConnectionManager.setDefaultMaxPerRoute(perRoute);
 
         CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(csf).setConnectionManager(pollingConnectionManager).build();
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
         factory.setHttpClient(httpClient);
-        factory.setConnectTimeout(5000);
-        factory.setReadTimeout(6000);
+        factory.setReadTimeout(10000);//ms
+        factory.setConnectTimeout(15000);//ms
         factory.setConnectionRequestTimeout(60000);
 
         return factory;
     }
+//    @Bean
+//    public RestTemplate restTemplate(HttpComponentsClientHttpRequestFactory factory) {
+//        RestTemplate restTemplate = new RestTemplate(factory);
+//        restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+//        restTemplate.getMessageConverters().add(new WxMappingJackson2HttpMessageConverter());
+//        return restTemplate;
+//    }
+//
+//    @Bean
+//    public HttpComponentsClientHttpRequestFactory generateHttpRequestFactory()
+//            throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException
+//    {
+//        TrustStrategy acceptingTrustStrategy = (x509Certificates, authType) -> true;
+//        SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
+//        LayeredConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
+//
+//        Registry<ConnectionSocketFactory> sfr = RegistryBuilder.<ConnectionSocketFactory>create().register("http", PlainConnectionSocketFactory.getSocketFactory()).register("https", csf != null ? csf : SSLConnectionSocketFactory.getSocketFactory()).build();
+//        PoolingHttpClientConnectionManager pollingConnectionManager = new PoolingHttpClientConnectionManager(sfr);
+//
+//
+//        CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(csf).setConnectionManager(pollingConnectionManager).build();
+//        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+//        factory.setHttpClient(httpClient);
+//        factory.setConnectTimeout(5000);
+//        factory.setReadTimeout(6000);
+//        factory.setConnectionRequestTimeout(60000);
+//
+//        return factory;
+//    }
 //    @Bean
 //    public ClientHttpRequestFactory httpRequestFactory() {
 //        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
