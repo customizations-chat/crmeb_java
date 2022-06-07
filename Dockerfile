@@ -42,5 +42,6 @@ RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 EXPOSE 80
 
+
 CMD [ "./start.sh" ]
 
