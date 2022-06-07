@@ -52,7 +52,7 @@ import java.security.NoSuchAlgorithmException;
 @Component
 public class RestTemplateUtil {
 
-
+    @Autowired
     private RestTemplate restTemplate;
 
     public static final String WXPAYSDK_VERSION = "WXPaySDK/3.0.9";
@@ -63,18 +63,17 @@ public class RestTemplateUtil {
 //    /**
 //     * 设置超时时间
 //     */
-    @Autowired
-    public RestTemplateUtil() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-//        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-//        //30s
-//        requestFactory.setConnectTimeout(30*1000);
-//        requestFactory.setReadTimeout(30*1000);
-        try {
-            restTemplate =new RestTemplate(RestTemplateConfiguration.generateHttpRequestFactory());
-        }catch (Exception e){
-            throw e;
-        }
-    }
+//    public RestTemplateUtil() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+////        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+////        //30s
+////        requestFactory.setConnectTimeout(30*1000);
+////        requestFactory.setReadTimeout(30*1000);
+//        try {
+//            restTemplate =new RestTemplate(RestTemplateConfiguration.generateHttpRequestFactory());
+//        }catch (Exception e){
+//            throw e;
+//        }
+//    }
 
     /**
      * 发送GET请求
