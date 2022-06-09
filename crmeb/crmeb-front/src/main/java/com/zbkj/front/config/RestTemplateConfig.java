@@ -48,6 +48,8 @@ public class RestTemplateConfig {
     public RestTemplate restTemplate(HttpComponentsClientHttpRequestFactory factory) {
         try {
             RestTemplate restTemplate = new RestTemplate(factory);
+            restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+            restTemplate.getMessageConverters().add(new WxMappingJackson2HttpMessageConverter());
             return restTemplate;
         } catch (Exception e) {
             throw new RuntimeException("Unable to initiate RestTemplate for access wechat-proxy.");
