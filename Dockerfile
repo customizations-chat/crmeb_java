@@ -28,7 +28,7 @@ ADD  crmeb/pom.xml /data/
 RUN mvn install -Dmaven.test.skip=true
 
 # runtime
-FROM adoptopenjdk/openjdk8:jre8u282-b08
+FROM adoptopenjdk/openjdk8
 
 WORKDIR /data
 COPY --from=builder /root/.m2/repository/com/zbkj/crmeb-admin/0.0.1-SNAPSHOT/crmeb-admin-0.0.1-SNAPSHOT.jar /data/crmeb-admin.jar
