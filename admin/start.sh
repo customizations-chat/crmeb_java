@@ -1,6 +1,7 @@
 #!/bin/sh
-sed -i "s/ADMIN_URL/${ADMIN_URL_ENV}/g" `grep -rl "ADMIN_URL" /usr/nginx/wwwroot/static/js/`
-
+url=${ADMIN_URL_ENV}
+sed -i "s/ADMIN_URL/${url}/g" `grep -rl "ADMIN_URL" /usr/nginx/wwwroot/static/js/`
+sleep 5
 nginx -g "daemon off;"
 
 
